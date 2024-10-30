@@ -1,0 +1,44 @@
+name: Continuous Integration (CI)
+
+# Define as condições para iniciar o workflow
+on:
+  push:
+    branches: 
+      - "main"  # Executa o workflow quando houver push na branch "main"
+  pull_request:
+    branches: 
+      - "main"  # Executa o workflow em pull requests para a branch "main"
+  workflow_dispatch:  # Permite execução manual pela aba Actions
+
+# Define os jobs que compõem o workflow
+jobs:
+  # Job único para build e testes
+  build-and-test:
+    # Runner que será utilizado
+    runs-on: ubuntu-latest
+
+    # Definindo etapas do job
+    steps:
+      # Baixa o repositório para o diretório de trabalho do GitHub (GITHUB_WORKSPACE)
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # Instala dependências, caso seja um projeto com Node.js (exemplo)
+      - name: Install dependencies
+        run: |
+          if [ -f package.json ]; then
+            npm install
+          fi
+
+      # Executa uma série de comandos para testes e construção do projeto
+      - name: Build and Test Project
+        run: |
+          echo "Iniciando a construção e testes..."
+          # Exemplo de build/test; ajuste conforme o seu ambiente de projeto
+          if [ -f package.json ]; then
+            npm run build && npm test
+          fi
+
+      # Exemplo de mensagem final
+      - name: Complete CI process
+        run: echo "Build e testes finalizados com sucesso! Projeto pronto para deploy."
